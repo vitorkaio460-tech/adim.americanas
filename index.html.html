@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel De Kaio - 10 Cores</title>
+  <style>
+    /* ===== RESET E VARIÁVEIS ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #000000;
+      --primary: #ffffff;
+      --primary-glow: rgba(255, 255, 255, 0.2);
+      --text: #f0f0f0;
+      --value-color: #00ff88;
+      --border: 1px solid var(--primary);
+      --font-mono: 'Courier New', monospace;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      padding: 15px;
+      position: relative;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ===== FUNDO MATRIX RAIN (VERDE) ===== */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      backdrop-filter: blur(1px);
+      border: var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    /* ===== CABEÇALHO COM IMAGEM ===== */
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 25px;
+      border-bottom: 1px solid var(--primary);
+      padding-bottom: 15px;
+    }
+
+    .title-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--primary);
+      text-shadow: 0 0 5px var(--primary);
+    }
+
+    /* Animação com 10 cores para o nome Kaio */
+    .kaio {
+      display: inline-block;
+      font-weight: bold;
+      animation: rainbowColors 10s infinite;
+    }
+
+    @keyframes rainbowColors {
+      0% { color: #ff0000; text-shadow: 0 0 5px #ff0000; }
+      10% { color: #ff7700; text-shadow: 0 0 5px #ff7700; }
+      20% { color: #ffff00; text-shadow: 0 0 5px #ffff00; }
+      30% { color: #00ff00; text-shadow: 0 0 5px #00ff00; }
+      40% { color: #0000ff; text-shadow: 0 0 5px #0000ff; }
+      50% { color: #4b0082; text-shadow: 0 0 5px #4b0082; }
+      60% { color: #8f00ff; text-shadow: 0 0 5px #8f00ff; }
+      70% { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
+      80% { color: #00ffff; text-shadow: 0 0 5px #00ffff; }
+      90% { color: #ff99cc; text-shadow: 0 0 5px #ff99cc; }
+      100% { color: #ff0000; text-shadow: 0 0 5px #ff0000; }
+    }
+
+    .stats {
+      display: flex;
+      gap: 15px;
+    }
+
+    .stat {
+      background: transparent;
+      border: var(--border);
+      border-radius: 8px;
+      padding: 8px 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      box-shadow: 0 0 8px var(--primary-glow);
+    }
+
+    .stat span:last-child {
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+
+    /* Imagem do Sasuke Sharingan com borda branca */
+    .sharingan-img {
+      max-width: 200px;
+      height: auto;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      margin: 10px 0;
+      transition: transform 0.3s;
+    }
+
+    .sharingan-img:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 25px white;
+    }
+
+    /* ===== RESUMO DO TOTAL ===== */
+    .total-card {
+      background: transparent;
+      border: var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      text-align: center;
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+
+    .total-label {
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--primary);
+    }
+
+    .total-value {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--value-color);
+      text-shadow: 0 0 8px var(--value-color);
+      line-height: 1.2;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: transparent;
+      border: var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 10px rgba(255,255,255,0.1);
+    }
+
+    .card h2 {
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 10px;
+      color: var(--primary);
+    }
+
+    /* ===== FORMULÁRIO ===== */
+    .form-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    .form-group input {
+      flex: 1 1 200px;
+      background: rgba(0,0,0,0.2);
+      border: var(--border);
+      padding: 12px 15px;
+      border-radius: 6px;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      box-shadow: 0 0 8px var(--primary);
+    }
+
+    .form-group button {
+      background: transparent;
+      border: var(--border);
+      color: var(--primary);
+      padding: 12px 25px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .form-group button:hover {
+      background: var(--primary);
+      color: black;
+      box-shadow: 0 0 10px var(--primary);
+    }
+
+    /* ===== BOTÃO LIMPAR TUDO ===== */
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .card-header h2 {
+      margin-bottom: 0;
+    }
+
+    .btn-clear-all {
+      background: transparent;
+      border: 1px solid #cccccc;
+      color: #cccccc;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-clear-all:hover {
+      background: #ffffff;
+      color: black;
+      box-shadow: 0 0 8px white;
+    }
+
+    /* ===== TABELA ===== */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 12px 8px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    th {
+      color: var(--primary);
+      font-weight: normal;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    tr:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Valores em verde */
+    td:nth-child(3) {
+      color: var(--value-color);
+      font-weight: bold;
+      text-shadow: 0 0 5px var(--value-color);
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid #cccccc;
+      color: #cccccc;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      transition: 0.3s;
+    }
+
+    .btn-delete:hover {
+      background: #ffffff;
+      color: black;
+      box-shadow: 0 0 8px white;
+    }
+
+    /* ===== RESPONSIVO ===== */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.5rem; }
+      .stat { padding: 5px 10px; font-size: 0.9rem; }
+      .total-value { font-size: 2.5rem; }
+      .form-group button { width: 100%; }
+      .card-header { flex-direction: column; align-items: flex-start; }
+      .sharingan-img { max-width: 120px; }
+    }
+  </style>
+  <!-- Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <!-- Canvas para o efeito matrix rain verde -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <div class="container">
+    <header>
+      <div class="title-section">
+        <h1>Painel De <span class="kaio">Kaio</span></h1>
+        <div class="stats">
+          <div class="stat">
+            <i class="fas fa-users"></i>
+            <span>Online:</span>
+            <span id="online-count">3</span>
+          </div>
+          <div class="stat">
+            <i class="fas fa-eye"></i>
+            <span>Acessos:</span>
+            <span id="acessos-count">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Imagem do Sasuke Sharingan -->
+      <img src="https://criticalhits.com.br/wp-content/uploads/2019/10/Sasuke-Wakens-His-Mangekyo-Sharingan.webp" 
+           alt="Sasuke Sharingan" 
+           class="sharingan-img"
+           onerror="this.onerror=null; this.src='https://via.placeholder.com/200x200?text=Sharingan';">
+    </header>
+
+    <!-- RESUMO DO TOTAL ACUMULADO -->
+    <div class="total-card">
+      <div class="total-label">Total acumulado em Pix</div>
+      <div class="total-value" id="total-pix">R$ 0,00</div>
+    </div>
+
+    <div class="card">
+      <h2><i class="fas fa-key"></i> Inserir novo Pix</h2>
+      <div class="form-group">
+        <input type="text" id="pix-chave" placeholder="Chave Pix (email, CPF...)" autocomplete="off">
+        <input type="number" id="pix-valor" placeholder="Valor (R$)" step="0.01" min="0" autocomplete="off">
+        <input type="text" id="pix-desc" placeholder="Descrição (opcional)" autocomplete="off">
+        <button id="btn-add"><i class="fas fa-plus"></i> Adicionar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-history"></i> Histórico de Pix gerados</h2>
+        <button id="btn-clear-all" class="btn-clear-all"><i class="fas fa-trash-alt"></i> Limpar tudo</button>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Chave</th>
+              <th>Valor (R$)</th>
+              <th>Descrição</th>
+              <th>Data</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="pix-list">
+            <!-- Preenchido via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ===== MATRIX RAIN VERDE =====
+      const canvas = document.getElementById('matrix-canvas');
+      const ctx = canvas.getContext('2d');
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const fontSize = 18;
+      const columns = canvas.width / fontSize;
+      const drops = [];
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.floor(Math.random() * canvas.height);
+      }
+
+      function drawMatrix() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#00ff88';
+        ctx.font = fontSize + 'px monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+          const text = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+      setInterval(drawMatrix, 50);
+
+      // ===== DADOS DO PAINEL =====
+      let pixArray = JSON.parse(localStorage.getItem('kaio_pix')) || [];
+
+      // Contador de acessos
+      let acessos = localStorage.getItem('kaio_acessos') ? parseInt(localStorage.getItem('kaio_acessos')) : 0;
+      acessos += 1;
+      localStorage.setItem('kaio_acessos', acessos);
+      document.getElementById('acessos-count').textContent = acessos;
+
+      // Simula online (aleatório)
+      document.getElementById('online-count').textContent = Math.floor(Math.random() * 5) + 1;
+
+      // ===== ELEMENTOS DOM =====
+      const pixListEl = document.getElementById('pix-list');
+      const chaveInput = document.getElementById('pix-chave');
+      const valorInput = document.getElementById('pix-valor');
+      const descInput = document.getElementById('pix-desc');
+      const btnAdd = document.getElementById('btn-add');
+      const btnClearAll = document.getElementById('btn-clear-all');
+      const totalEl = document.getElementById('total-pix');
+
+      // ===== FUNÇÕES =====
+      function calcularTotal() {
+        const total = pixArray.reduce((acc, pix) => acc + (parseFloat(pix.valor) || 0), 0);
+        totalEl.textContent = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      }
+
+      function salvarDados() {
+        localStorage.setItem('kaio_pix', JSON.stringify(pixArray));
+        calcularTotal();
+      }
+
+      function renderizarTabela() {
+        if (!pixListEl) return;
+        pixListEl.innerHTML = '';
+        const sorted = [...pixArray].sort((a,b) => b.id - a.id);
+        sorted.forEach(pix => {
+          const tr = document.createElement('tr');
+          tr.setAttribute('data-id', pix.id);
+          tr.innerHTML = `
+            <td>${pix.id}</td>
+            <td style="word-break: break-word;">${pix.chave}</td>
+            <td>R$ ${parseFloat(pix.valor).toFixed(2)}</td>
+            <td>${pix.descricao || '-'}</td>
+            <td>${pix.data}</td>
+            <td><button class="btn-delete" onclick="removerPix(${pix.id})"><i class="fas fa-trash"></i> Excluir</button></td>
+          `;
+          pixListEl.appendChild(tr);
+        });
+        calcularTotal();
+      }
+
+      function falarPixGerado() {
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance('Pix gerado');
+          utterance.lang = 'pt-BR';
+          utterance.rate = 1.2;
+          utterance.pitch = 1;
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        }
+      }
+
+      window.removerPix = function(id) {
+        if (confirm('Excluir este Pix?')) {
+          pixArray = pixArray.filter(p => p.id !== id);
+          salvarDados();
+          renderizarTabela();
+        }
+      };
+
+      function limparTudo() {
+        if (pixArray.length === 0) {
+          alert('Nenhum Pix para limpar.');
+          return;
+        }
+        if (confirm('Tem certeza que deseja limpar TODO o histórico de Pix?')) {
+          pixArray = [];
+          salvarDados();
+          renderizarTabela();
+        }
+      }
+
+      function adicionarPix(chave, valor, descricao) {
+        if (!chave.trim()) {
+          alert('Digite a chave Pix');
+          return false;
+        }
+        if (!valor || parseFloat(valor) <= 0) {
+          alert('Digite um valor válido (maior que zero)');
+          return false;
+        }
+        const novoPix = {
+          id: Date.now(),
+          chave: chave.trim(),
+          valor: parseFloat(valor),
+          descricao: descricao.trim(),
+          data: new Date().toLocaleString('pt-BR')
+        };
+        pixArray.push(novoPix);
+        salvarDados();
+        renderizarTabela();
+        falarPixGerado();
+        return true;
+      }
+
+      btnAdd.addEventListener('click', () => {
+        if (adicionarPix(chaveInput.value, valorInput.value, descInput.value)) {
+          chaveInput.value = '';
+          valorInput.value = '';
+          descInput.value = '';
+        }
+      });
+
+      btnClearAll.addEventListener('click', limparTudo);
+
+      [chaveInput, valorInput, descInput].forEach(input => {
+        input.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            btnAdd.click();
+          }
+        });
+      });
+
+      window.addEventListener('storage', (event) => {
+        if (event.key === 'kaio_pix') {
+          pixArray = JSON.parse(event.newValue) || [];
+          renderizarTabela();
+        }
+        if (event.key === 'kaio_acessos') {
+          acessos = parseInt(event.newValue) || 0;
+          document.getElementById('acessos-count').textContent = acessos;
+        }
+      });
+
+      renderizarTabela();
+    })();
+  </script>
+</body>
+</html>
